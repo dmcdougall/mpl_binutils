@@ -6,13 +6,13 @@ This is `mpl_binutils`, a command-line front-end for matplotlib line-plotting.
 Installing mpl_binutils
 =======================
 
-To install, just execute the following command from the source root:
+To install, execute the following commands from the source root
 
     $ chmod u+x mpl-graph  # makes the script executable by you
     $ cp mpl-graph /usr/local/bin/  # put the script in a sensible place
 
-You should copy the script to a directory that is in yout `PATH` environment
-variable.
+You should copy the `mpl-graph` script to a directory that is in yout `PATH`
+environment variable.
 
 Using mpl_binutils
 ==================
@@ -21,8 +21,21 @@ To learn how to use `mpl-graph`, execute
 
     $ mpl-graph --help
 
-for usage information. The interface is very similar to that of the `graph`
-utility in GNU plotutils.
+for usage information. You should get output like the following
+
+    Usage: mpl-graph [options] <file>
+           mpl-graph --help
+           mpl-graph --version
+
+    Options:
+        -T, --output-format=<filetype>  Specify output filetype [default: pdf]
+        -s, --size-of-plot=<size>       Specify plot size in inches: width,height
+        -x, --x-limits=<xlimits>        Specify x-axis limits: xmin,xmax,xnum
+        -y, --y-limits=<ylimits>        Specify y-axis limits: ymin,ymax,ynum
+        -X, --x-label=<xlabel>          Specify x-axis label
+        -Y, --y-label=<ylabel>          Specify y-axis label
+
+The interface is very similar to that of the `graph` utility in GNU plotutils.
 
 The following `bash` commands show an explicit example of `mpl-graph` usage.
 
