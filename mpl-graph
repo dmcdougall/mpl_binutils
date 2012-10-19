@@ -22,12 +22,12 @@ Options:
 
 import sys
 from docopt import docopt
+args = docopt(usage, version=version)
+
 from matplotlib import rcParams
 from matplotlib.backends.backend_agg import FigureCanvasAgg as fc
 from matplotlib.figure import Figure
 import matplotlib.ticker as mticker
-
-args = docopt(usage, version=version)
 
 def parse_fig_params(args):
     """
