@@ -4,21 +4,21 @@
 #
 # Author: Damon McDougall <damon.mcdougall@gmail.com>
 
-def usage():
-    """
-    Usage: mpl-graph [options] <file>
-           mpl-graph --help
-           mpl-graph --version
+version='1.0.0'
 
-    Options:
-        -T, --output-format=<filetype>  Specify output filetype [default: pdf]
-        -s, --size-of-plot=<size>       Specify plot size in inches: width,height
-        -x, --x-limits=<xlimits>        Specify x-axis limits: xmin,xmax,xnum
-        -y, --y-limits=<ylimits>        Specify y-axis limits: ymin,ymax,ynum
-        -X, --x-label=<xlabel>          Specify x-axis label
-        -Y, --y-label=<ylabel>          Specify y-axis label
-    """
-    pass
+usage = """
+Usage: mpl-graph [options] <file>
+       mpl-graph --help
+       mpl-graph --version
+
+Options:
+    -T, --output-format=<filetype>  Specify output filetype [default: pdf]
+    -s, --size-of-plot=<size>       Specify plot size in inches: width,height
+    -x, --x-limits=<xlimits>        Specify x-axis limits: xmin,xmax,xnum
+    -y, --y-limits=<ylimits>        Specify y-axis limits: ymin,ymax,ynum
+    -X, --x-label=<xlabel>          Specify x-axis label
+    -Y, --y-label=<ylabel>          Specify y-axis label
+"""
 
 import sys
 from docopt import docopt
@@ -27,7 +27,7 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as fc
 from matplotlib.figure import Figure
 import matplotlib.ticker as mticker
 
-args = docopt(usage.__doc__, version='v0.0')
+args = docopt(usage, version=version)
 
 def parse_fig_params(args):
     """
