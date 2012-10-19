@@ -3,6 +3,14 @@ mpl_binutils
 
 This is `mpl_binutils`, a command-line front-end for matplotlib line-plotting.
 
+Dependencies
+============
+
+You will need:
+
+- [matplotlib](https://github.com/matplotlib/matplotlib): 1.1 or higher
+- [docopt](https://github.com/docopt/docopt): 0.5 or higher
+
 Installing mpl_binutils
 =======================
 
