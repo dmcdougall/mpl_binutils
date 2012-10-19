@@ -1,0 +1,78 @@
+#!/usr/bin/env python
+#
+# Command-line front-end for matplotlib line plots
+#
+# Author: Damon McDougall <damon.mcdougall@gmail.com>
+
+def usage():
+    """
+    Usage: mpl-graph [options] <file>
+           mpl-graph --help
+           mpl-graph --version
+
+    Options:
+        -T, --output-format=<filetype>  Specify output filetype [default: pdf]
+        -s, --size-of-plot=<size>       Specify plot size in inches: width,height
+        -x, --x-limits=<xlimits>        Specify x-axis limits: xmin,xmax,xnum
+        -y, --y-limits=<ylimits>        Specify y-axis limits: ymin,ymax,ynum
+        -X, --x-label=<xlabel>          Specify x-axis label
+        -Y, --y-label=<ylabel>          Specify y-axis label
+    """
+    pass
+
+import sys
+from docopt import docopt
+from matplotlib import rcParams
+from matplotlib.backends.backend_agg import FigureCanvasAgg as fc
+from matplotlib.figure import Figure
+import matplotlib.ticker as mticker
+
+args = docopt(usage.__doc__, version='v0.0')
+
+def parse_fig_params(args):
+    """
+    Parse figure-specific parameters
+    """
+    s = args['--size-of-plot']
+    if s:
+        s = [float(i) for i in s.split(',')]
+        rcParams['figure.figsize'] = s
+
+# Data is assumed to be a text file specifying x and y coordinates
+infile = open(args['<file>'])
+lines = infile.read()
+data = [float(coord) for coord in lines.split()]
+infile.close()
+
+parse_fig_params(args)
+fig = Figure()
+canvas = fc(fig)
+ax = fig.add_subplot(1, 1, 1)
+ax.plot(data[0::2], data[1::2])
+
+# Set up labels
+if args['--x-label']:
+    ax.set_xlabel(args['--x-label'])
+if args['--y-label']:
+    ax.set_ylabel(args['--y-label'])
+
+# Set up limits
+xlims = args['--x-limits']
+ylims = args['--y-limits']
+if xlims:
+    xlims = [float(i) for i in xlims.split(',')]
+    ax.set_xlim(xlims[0:2])
+if ylims:
+    ylims = [float(i) for i in ylims.split(',')]
+    ax.set_ylim(ylims[0:2])
+
+# Some default, nicely placed tick-marks
+if len(xlims) == 3:
+    xlocator = mticker.MaxNLocator(int(xlims[2] - 1))
+    ax.xaxis.set_major_locator(xlocator)
+if len(ylims) == 3:
+    ylocator = mticker.MaxNLocator(int(ylims[2] - 1))
+    ax.yaxis.set_major_locator(ylocator)
+
+fig.tight_layout(pad=0.1)
+fig.savefig(sys.stdout, format=args['--output-format'])
