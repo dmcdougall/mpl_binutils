@@ -20,6 +20,7 @@ Options:
     -k, --tick-size=<ticksize>      Set tick length
     -s, --size-of-plot=<size>       Specify plot size in inches: width,height
     -N, --toggle-no-ticks=<axes>    Turn off ticks for the given comma-separated list of axes
+    -C, --color=<color>             Set line color
     -x, --x-limits=<xlimits>        Specify x-axis limits: xmin,xmax,xnum
     -y, --y-limits=<ylimits>        Specify y-axis limits: ymin,ymax,ynum
     -X, --x-label=<xlabel>          Specify x-axis label
@@ -65,6 +66,9 @@ if args['--line-mode']:
         plot_kwargs['ls'] = '-.'
     elif ls == 4:
         plot_kwargs['ls'] = ':'
+
+if args['--color']:
+    plot_kwargs['color'] = args['--color']
 
 # Plot the data
 ax.plot(data[0::2], data[1::2], **plot_kwargs)
