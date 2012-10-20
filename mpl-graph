@@ -13,6 +13,7 @@ Usage: mpl-graph [options] <file>
 
 Options:
     -T, --output-format=<filetype>  Specify output filetype [default: pdf]
+    -f, --font-size=<fontsize>      Set font size for ticks and labels
     -g, --grid                      Turn on grid
     -W, --line-width=<linewidth>    Set line-width of plotted lines
     -m, --line-mode                 Value from 1-4 specifying line style [default: 1]
@@ -101,6 +102,13 @@ if args['--toggle-no-ticks']:
         ax.xaxis.set_major_locator(mticker.NullLocator())
     if 'y' in list_axes:
         ax.yaxis.set_major_locator(mticker.NullLocator())
+
+if args['--font-size']:
+    size = float(args['--font-size'])
+    ax.xaxis.set_tick_params(labelsize=size)
+    ax.yaxis.set_tick_params(labelsize=size)
+    ax.xaxis.label.set_fontsize(size)
+    ax.yaxis.label.set_fontsize(size)
 
 if args['--tight']:
     fig.tight_layout(pad=0.1)
