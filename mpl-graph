@@ -13,6 +13,7 @@ Usage: mpl-graph [options] <file>
 
 Options:
     -T, --output-format=<filetype>  Specify output filetype [default: pdf]
+    -g, --grid                      Turn on grid
     -W, --line-width=<linewidth>    Set line-width of plotted lines
     -s, --size-of-plot=<size>       Specify plot size in inches: width,height
     -N, --toggle-no-ticks=<axes>    Turn off ticks for the given comma-separated list of axes
@@ -53,6 +54,9 @@ if args['--line-width']:
 
 # Plot the data
 ax.plot(data[0::2], data[1::2], **plot_kwargs)
+
+if args['--grid']:
+    ax.grid(True)
 
 # Set up labels
 if args['--x-label']:
