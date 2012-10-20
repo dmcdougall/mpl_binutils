@@ -15,6 +15,7 @@ Options:
     -T, --output-format=<filetype>  Specify output filetype [default: pdf]
     -W, --line-width=<linewidth>    Set line-width of plotted lines
     -s, --size-of-plot=<size>       Specify plot size in inches: width,height
+    -N, --toggle-no-ticks=<axes>    Turn off ticks for the given comma-separated list of axes
     -x, --x-limits=<xlimits>        Specify x-axis limits: xmin,xmax,xnum
     -y, --y-limits=<ylimits>        Specify y-axis limits: ymin,ymax,ynum
     -X, --x-label=<xlabel>          Specify x-axis label
@@ -76,6 +77,14 @@ if len(xlims) == 3:
 if len(ylims) == 3:
     ylocator = mticker.MaxNLocator(int(ylims[2] - 1))
     ax.yaxis.set_major_locator(ylocator)
+
+# Specifying '--toggle-no-ticks' overrides the above locator
+if args['--toggle-no-ticks']:
+    list_axes = args['--toggle-no-ticks'].split(',')
+    if 'x' in list_axes:
+        ax.xaxis.set_major_locator(mticker.NullLocator())
+    if 'y' in list_axes:
+        ax.yaxis.set_major_locator(mticker.NullLocator())
 
 if args['--tight']:
     fig.tight_layout(pad=0.1)
