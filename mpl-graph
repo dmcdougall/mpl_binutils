@@ -13,6 +13,7 @@ Usage: mpl-graph [options] <file>
 
 Options:
     -T, --output-format=<filetype>  Specify output filetype [default: pdf]
+    -W, --line-width=<linewidth>    Set line-width of plotted lines
     -s, --size-of-plot=<size>       Specify plot size in inches: width,height
     -x, --x-limits=<xlimits>        Specify x-axis limits: xmin,xmax,xnum
     -y, --y-limits=<ylimits>        Specify y-axis limits: ymin,ymax,ynum
@@ -43,7 +44,14 @@ if args['--size-of-plot']:
 
 canvas = fc(fig)
 ax = fig.add_subplot(1, 1, 1)
-ax.plot(data[0::2], data[1::2])
+
+# Parse out plot properties
+plot_kwargs = {}
+if args['--line-width']:
+    plot_kwargs['lw'] =  float(args['--line-width'])
+
+# Plot the data
+ax.plot(data[0::2], data[1::2], **plot_kwargs)
 
 # Set up labels
 if args['--x-label']:
