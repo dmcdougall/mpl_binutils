@@ -26,6 +26,7 @@ Options:
     -y, --y-limits=<ylimits>        Specify y-axis limits: ymin,ymax,ynum
     -X, --x-label=<xlabel>          Specify x-axis label
     -Y, --y-label=<ylabel>          Specify y-axis label
+    --title-font-size=<titlesize>   Set font size of the axes title
     --tight                         Make the figure use most available whitespace
 """
 
@@ -123,6 +124,10 @@ if args['--font-size']:
     ax.yaxis.set_tick_params(labelsize=size)
     ax.xaxis.label.set_fontsize(size)
     ax.yaxis.label.set_fontsize(size)
+
+if args['--title-font-size']:
+    size = float(args['--title-font-size'])
+    ax.title.set_fontsize(size)
 
 if args['--tight']:
     fig.tight_layout(pad=0.1)
