@@ -37,11 +37,21 @@ for usage information. You should get output like the following
 
     Options:
         -T, --output-format=<filetype>  Specify output filetype [default: pdf]
+        -f, --font-size=<fontsize>      Set font size for ticks and labels
+        -g, --grid                      Turn on grid
+        -W, --line-width=<linewidth>    Set line-width of plotted lines
+        -m, --line-mode                 Value from 1-4 specifying line style [default: 1]
+        -k, --tick-size=<ticksize>      Set tick length
         -s, --size-of-plot=<size>       Specify plot size in inches: width,height
+        -N, --toggle-no-ticks=<axes>    Turn off ticks for the given comma-separated list of axes
+        -C, --color=<color>             Set line color
+        -L, --top-label=<title>         Set plot title
         -x, --x-limits=<xlimits>        Specify x-axis limits: xmin,xmax,xnum
         -y, --y-limits=<ylimits>        Specify y-axis limits: ymin,ymax,ynum
         -X, --x-label=<xlabel>          Specify x-axis label
         -Y, --y-label=<ylabel>          Specify y-axis label
+        --title-font-size=<titlesize>   Set font size of the axes title
+        --tight                         Make the figure use most available whitespace
 
 The interface is very similar to that of the `graph` utility in GNU plotutils.
 
