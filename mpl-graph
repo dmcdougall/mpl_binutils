@@ -18,6 +18,7 @@ Options:
     -y, --y-limits=<ylimits>        Specify y-axis limits: ymin,ymax,ynum
     -X, --x-label=<xlabel>          Specify x-axis label
     -Y, --y-label=<ylabel>          Specify y-axis label
+    --tight                         Make the figure use most available whitespace
 """
 
 import sys
@@ -74,5 +75,6 @@ if len(ylims) == 3:
     ylocator = mticker.MaxNLocator(int(ylims[2] - 1))
     ax.yaxis.set_major_locator(ylocator)
 
-fig.tight_layout(pad=0.1)
+if args['--tight']:
+    fig.tight_layout(pad=0.1)
 fig.savefig(sys.stdout, format=args['--output-format'])
