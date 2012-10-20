@@ -25,19 +25,9 @@ import sys
 from docopt import docopt
 args = docopt(usage, version=version)
 
-from matplotlib import rcParams
 from matplotlib.backends.backend_agg import FigureCanvasAgg as fc
 from matplotlib.figure import Figure
 import matplotlib.ticker as mticker
-
-def parse_fig_params(args):
-    """
-    Parse figure-specific parameters
-    """
-    s = args['--size-of-plot']
-    if s:
-        s = [float(i) for i in s.split(',')]
-        rcParams['figure.figsize'] = s
 
 # Data is assumed to be a text file specifying x and y coordinates
 infile = open(args['<file>'])
@@ -45,8 +35,12 @@ lines = infile.read()
 data = [float(coord) for coord in lines.split()]
 infile.close()
 
-parse_fig_params(args)
 fig = Figure()
+if args['--size-of-plot']:
+    size = args['--size-of-plot']
+    size = [float(i) for i in size.split(',')]
+    fig.set_size_inches(size)
+
 canvas = fc(fig)
 ax = fig.add_subplot(1, 1, 1)
 ax.plot(data[0::2], data[1::2])
