@@ -21,6 +21,7 @@ Options:
     -s, --size-of-plot=<size>       Specify plot size in inches: width,height
     -N, --toggle-no-ticks=<axes>    Turn off ticks for the given comma-separated list of axes
     -C, --color=<color>             Set line color
+    -L, --top-label=<title>         Set plot title
     -x, --x-limits=<xlimits>        Specify x-axis limits: xmin,xmax,xnum
     -y, --y-limits=<ylimits>        Specify y-axis limits: ymin,ymax,ynum
     -X, --x-label=<xlabel>          Specify x-axis label
@@ -81,6 +82,9 @@ if args['--x-label']:
     ax.set_xlabel(args['--x-label'])
 if args['--y-label']:
     ax.set_ylabel(args['--y-label'])
+
+if args['--top-label']:
+    ax.set_title(args['--top-label'])
 
 # Set up limits
 xlims = args['--x-limits']
