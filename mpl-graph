@@ -34,9 +34,16 @@ import sys
 from docopt import docopt
 args = docopt(usage, version=version)
 
+from matplotlib.backend_bases import FigureCanvasBase
 from matplotlib.backends.backend_agg import FigureCanvasAgg as fc
 from matplotlib.figure import Figure
 import matplotlib.ticker as mticker
+
+types = FigureCanvasBase.filetypes.keys()
+if args['--output-format'] not in types:
+    sys.stderr.write('Format "asd" is not supported.\n')
+    sys.stderr.write('Supported formats: {}\n'.format(types))
+    sys.exit(1)
 
 # Data is assumed to be a text file specifying x and y coordinates
 try:
