@@ -39,7 +39,11 @@ from matplotlib.figure import Figure
 import matplotlib.ticker as mticker
 
 # Data is assumed to be a text file specifying x and y coordinates
-infile = open(args['<file>'])
+try:
+    infile = open(args['<file>'])
+except IOError:
+    sys.stderr.write('mpl-graph: {}: Not a valid input file\n'.format(args['<file>']))
+    sys.exit(1)
 lines = infile.read()
 data = [float(coord) for coord in lines.split()]
 infile.close()
