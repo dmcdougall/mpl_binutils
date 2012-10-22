@@ -93,17 +93,15 @@ ylims = args['--y-limits']
 if xlims:
     xlims = [float(i) for i in xlims.split(',')]
     ax.set_xlim(xlims[0:2])
+    if len(xlims) == 3:
+        xlocator = mticker.MaxNLocator(int(xlims[2] - 1))
+        ax.xaxis.set_major_locator(xlocator)
 if ylims:
     ylims = [float(i) for i in ylims.split(',')]
     ax.set_ylim(ylims[0:2])
-
-# Some default, nicely placed tick-marks
-if len(xlims) == 3:
-    xlocator = mticker.MaxNLocator(int(xlims[2] - 1))
-    ax.xaxis.set_major_locator(xlocator)
-if len(ylims) == 3:
-    ylocator = mticker.MaxNLocator(int(ylims[2] - 1))
-    ax.yaxis.set_major_locator(ylocator)
+    if len(ylims) == 3:
+        ylocator = mticker.MaxNLocator(int(ylims[2] - 1))
+        ax.yaxis.set_major_locator(ylocator)
 
 # Specifying '--toggle-no-ticks' overrides the above locator
 if args['--toggle-no-ticks']:
