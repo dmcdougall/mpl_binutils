@@ -12,6 +12,7 @@ Usage: mpl-graph [options] <file>
        mpl-graph --version
 
 Options:
+    -a, --auto-abscissa             Automatically generate the abscissa
     -T, --output-format=<filetype>  Specify output filetype [default: pdf]
     -f, --font-size=<fontsize>      Set font size for ticks and labels
     -g, --grid                      Turn on grid
@@ -84,7 +85,10 @@ if args['--color']:
     plot_kwargs['color'] = args['--color']
 
 # Plot the data
-ax.plot(data[0::2], data[1::2], **plot_kwargs)
+if args['--auto-abscissa']:
+    ax.plot(range(len(data)), data, **plot_kwargs)
+else:
+    ax.plot(data[0::2], data[1::2], **plot_kwargs)
 
 if args['--grid']:
     ax.grid(True)
