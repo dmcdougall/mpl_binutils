@@ -40,6 +40,27 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as fc
 from matplotlib.figure import Figure
 import matplotlib.ticker as mticker
 
+def split_option(option, length):
+    """
+    Split the string *option* by ',', and return a list of length *length*
+    """
+    length = list(length)
+    args = option.split(',')
+    if len(args) not in length:
+        sys.stderr.write('mpl-graph: Argument expected length {}. '
+                'Actual length of "{}" is {}\n'.format(length, option, len(args)))
+        sys.exit(1)
+    return args
+
+def to_float(arg_dict, opt):
+    try:
+        val = float(arg_dict[opt])
+    except ValueError:
+        sys.stderr.write('mpl-graph: Invalid argument "{}" '
+                'passed to {}\n'.format(arg_dict[opt], opt))
+        sys.exit(1)
+    return val
+
 types = FigureCanvasBase.filetypes.keys()
 if args['--output-format'] not in types:
     sys.stderr.write('Format "asd" is not supported.\n')
@@ -59,7 +80,7 @@ infile.close()
 fig = Figure()
 if args['--size-of-plot']:
     size = args['--size-of-plot']
-    size = [float(i) for i in size.split(',')]
+    size = [float(i) for i in split_option(size, 2)]
     fig.set_size_inches(size)
 
 canvas = fc(fig)
@@ -68,7 +89,7 @@ ax = fig.add_subplot(1, 1, 1)
 # Parse out plot properties
 plot_kwargs = {}
 if args['--line-width']:
-    plot_kwargs['lw'] =  float(args['--line-width'])
+    plot_kwargs['lw'] = to_float(args, '--line-width')
 
 if args['--line-mode']:
     ls = int(args['--line-mode'])
@@ -106,13 +127,13 @@ if args['--top-label']:
 xlims = args['--x-limits']
 ylims = args['--y-limits']
 if xlims:
-    xlims = [float(i) for i in xlims.split(',')]
+    xlims = [float(i) for i in split_option(xlims, [2, 3])]
     ax.set_xlim(xlims[0:2])
     if len(xlims) == 3:
         xlocator = mticker.MaxNLocator(int(xlims[2] - 1))
         ax.xaxis.set_major_locator(xlocator)
 if ylims:
-    ylims = [float(i) for i in ylims.split(',')]
+    ylims = [float(i) for i in split_option(ylims, [2, 3])]
     ax.set_ylim(ylims[0:2])
     if len(ylims) == 3:
         ylocator = mticker.MaxNLocator(int(ylims[2] - 1))
@@ -127,19 +148,19 @@ if args['--toggle-no-ticks']:
         ax.yaxis.set_major_locator(mticker.NullLocator())
 
 if args['--tick-size']:
-    size = float(args['--tick-size'])
+    size = to_float(args, '--tick-size')
     ax.xaxis.set_tick_params(length=size)
     ax.yaxis.set_tick_params(length=size)
 
 if args['--font-size']:
-    size = float(args['--font-size'])
+    size = to_float(args, '--font-size')
     ax.xaxis.set_tick_params(labelsize=size)
     ax.yaxis.set_tick_params(labelsize=size)
     ax.xaxis.label.set_fontsize(size)
     ax.yaxis.label.set_fontsize(size)
 
 if args['--title-font-size']:
-    size = float(args['--title-font-size'])
+    size = to_float(args, '--title-font-size')
     ax.title.set_fontsize(size)
 
 if args['--tight']:
