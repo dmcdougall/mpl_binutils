@@ -19,6 +19,7 @@ Options:
     -W, --line-width=<linewidth>    Set line-width of plotted lines
     -m, --line-mode                 Value from 1-4 specifying line style [default: 1]
     -k, --tick-size=<ticksize>      Set tick length
+    -l, --toggle-log-axis=<axes>    Toggle log axis for the given comma-separated list of axes
     -s, --size-of-plot=<size>       Specify plot size in inches: width,height
     -N, --toggle-no-ticks=<axes>    Turn off ticks for the given comma-separated list of axes
     -C, --color=<color>             Set line color
@@ -110,6 +111,14 @@ if args['--auto-abscissa']:
     ax.plot(range(len(data)), data, **plot_kwargs)
 else:
     ax.plot(data[0::2], data[1::2], **plot_kwargs)
+
+# Specifying log axes
+if args['--toggle-log-axis']:
+    list_axes = args['--toggle-log-axis'].split(',')
+    if 'x' in list_axes:
+        ax.set_xscale('log')
+    if 'y' in list_axes:
+        ax.set_yscale('log')
 
 if args['--grid']:
     ax.grid(True)
