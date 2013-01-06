@@ -19,8 +19,20 @@ To install, execute the following commands from the source root
     $ chmod u+x mpl-graph  # makes the script executable by you
     $ cp mpl-graph /usr/local/bin/  # put the script in a sensible place
 
-You should copy the `mpl-graph` script to a directory that is in yout `PATH`
+You should copy the `mpl-graph` script to a directory that is in your `PATH`
 environment variable.
+
+For completeness, `mpl-graph` comes with a man page too. You can install it
+in much the same way as the executable described above, into a directory in
+your `MANPATH` variable. From the repository root, execute
+
+    $ cp docs/mpl-graph.3 /usr/local/share/man/man3/
+    $ gzip /usr/local/share/man/man3/mpl-graph.3
+
+Use of `/usr/local/share` is just an example. Anywhere that is in your
+`MANPATH` will do. To view the man page, execute
+
+    $ man mpl-graph
 
 Using mpl_binutils
 ==================
