@@ -1,0 +1,79 @@
+.\" Manpage for mpl-graph.
+.\" Contact damon.mcdougall@gmail.com to correct errors or typos.
+.TH man 3 "04 Jan 2013" "1.0" "mpl-graph man page"
+.SH NAME
+mpl-graph \- create line plots
+.SH SYNOPSIS
+.B mpl-graph
+[options] <file>
+
+.B mpl-graph
+--help
+
+.B mpl-graph
+--version
+.SH DESCRIPTION
+.B mpl-graph
+is part of the
+.B mpl_binutils
+package.
+
+The
+.B mpl_binutils
+package provides a command-line frontend to
+.B matplotlib
+'s
+plotting functionality, allowing the creation of publication quality graphs
+from the command line.
+
+.B mpl-graph
+provides the interface to produce line plots.
+
+To use
+.B mpl-graph
+you will need
+.B matplotlib
+and
+.B docopt
+installed.
+.SH OPTIONS
+.IP "-a, --auto-abscissa"
+Automatically generate the abscissa
+.IP "-T, --output-format=<filetype>"
+Specify output filetype [default: pdf]
+.IP "-f, --font-size=<fontsize>"
+Set font size for ticks and labels
+.IP "-g, --grid"
+Turn on grid
+.IP "-W, --line-width=<linewidth>"
+Set line-width of plotted lines
+.IP "-m, --line-mode"
+Value from 1-4 specifying line style [default: 1]
+.IP "-k, --tick-size=<ticksize>"
+Set tick length
+.IP "-l, --toggle-log-axis=<axes>"
+Toggle log axis for the given comma-separated list of axes
+.IP "-s, --size-of-plot=<size>"
+Specify plot size in inches: width,height
+.IP "-N, --toggle-no-ticks=<axes>"
+Turn off ticks for the given comma-separated list of axes
+.IP "-C, --color=<color>"
+Set line color
+.IP "-L, --top-label=<title>"
+Set plot title
+.IP "-x, --x-limits=<xlimits>"
+Specify x-axis limits: xmin,xmax,xnum
+.IP "-y, --y-limits=<ylimits>"
+Specify y-axis limits: ymin,ymax,ynum
+.IP "-X, --x-label=<xlabel>"
+Specify x-axis label
+.IP "-Y, --y-label=<ylabel>"
+Specify y-axis label
+.IP "--title-font-size=<titlesize>"
+Set font size of the axes title
+.IP "--tight"
+Make the figure use most available whitespace
+.SH BUGS
+No known bugs.
+.SH AUTHOR
+Damon McDougall <damon.mcdougall@gmail.com>
