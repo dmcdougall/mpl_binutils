@@ -1,10 +1,34 @@
 2013-01-06 Damon McDougall
 
+  * Update CHANGELOG with some lost commits
+
+2013-01-06 Damon McDougall
+
+  * Updated README.md for HDF5 file support
+
+2013-01-06 Damon McDougall
+
   * Update README.md to include man page install info
 
 2013-01-06 Damon McDougall
 
   * Add man page file. Remove bad spaces in CHANGELOG
+
+2013-01-04 Damon McDougall
+
+  * Add support for HDF5 files
+
+2013-01-04 Damon McDougall
+
+  * Add CHANGELOG file
+
+2013-01-03 Damon McDougall
+
+  * Add log axes capability
+
+2012-12-31 Damon McDougall
+
+  * Make option checking more robust
 
 2012-11-30 Damon McDougall
 
