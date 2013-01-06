@@ -67,6 +67,9 @@ for usage information. You should get output like the following
 
 The interface is very similar to that of the `graph` utility in GNU plotutils.
 
+Plotting ASCII text files
+-------------------------
+
 The following `bash` commands show an explicit example of `mpl-graph` usage.
 
     $ cat << EOF > data.dat
@@ -75,6 +78,9 @@ The following `bash` commands show an explicit example of `mpl-graph` usage.
     > 3.0 2.0
     EOF
     $ mpl-graph -T pdf -s 6,6 -x 1,4 -y 0,3 -X 'x label' -Y 'y label' data.dat > plot.pdf
+
+Plotting HDF5 datasets
+----------------------
 
 The example above shows how to plot a text file. HDF5 files are also supported
 but boast a slightly different syntax. 
