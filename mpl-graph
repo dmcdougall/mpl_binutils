@@ -36,6 +36,8 @@ import sys
 from docopt import docopt
 args = docopt(usage, version=version)
 
+import numpy as np
+
 from matplotlib.backend_bases import FigureCanvasBase
 from matplotlib.backends.backend_agg import FigureCanvasAgg as fc
 from matplotlib.figure import Figure
@@ -69,14 +71,31 @@ if args['--output-format'] not in types:
     sys.exit(1)
 
 # Data is assumed to be a text file specifying x and y coordinates
-try:
-    infile = open(args['<file>'])
-except IOError:
-    sys.stderr.write('mpl-graph: {}: Not a valid input file\n'.format(args['<file>']))
-    sys.exit(1)
-lines = infile.read()
-data = [float(coord) for coord in lines.split()]
-infile.close()
+# or an HDF5 file specifying only x and y coordinates in a 2d array
+if ':/' in args['<file>']:
+    # Assume HDF5 file with format filename:/path/to/dset
+    try:
+        import h5py
+    except ImportError:
+        sys.stderr.write('mpl-graph: Could not find h5py\n')
+        sys.exit(1)
+
+    tmp_fdata = args['<file>'].split(':')
+    hdfname = tmp_fdata[0]
+    dset_path = tmp_fdata[1]
+    hdf_file = h5py.File(hdfname, 'r')
+    hdf_data = hdf_file[dset_path][:]
+    if len(hdf_data == 2):
+        data = np.asarray(zip(hdf_data[0], hdf_data[1])).flatten()
+else:
+    try:
+        infile = open(args['<file>'])
+    except IOError:
+        sys.stderr.write('mpl-graph: {}: Not a valid input file\n'.format(args['<file>']))
+        sys.exit(1)
+    lines = infile.read()
+    data = [float(coord) for coord in lines.split()]
+    infile.close()
 
 fig = Figure()
 if args['--size-of-plot']:
