@@ -1,88 +1,96 @@
-2013-01-04 Damon McDougall 
+2013-01-06 Damon McDougall
 
-	* Add CHANGELOG file
+  * Update README.md to include man page install info
 
-2012-10-22 Damon McDougall 
+2013-01-06 Damon McDougall
 
-	* Add filetype validation
+  * Add man page file. Remove bad spaces in CHANGELOG
 
-2012-10-22 Damon McDougall 
+2012-11-30 Damon McDougall
 
-	* Add input file validation
+  * Support automatic generation of abscissa
 
-2012-10-22 Damon McDougall 
+2012-10-22 Damon McDougall
 
-	* Fix auto tick placement when not user-specified
+  * Add filetype validation
 
-2012-10-20 Damon McDougall 
+2012-10-22 Damon McDougall
 
-	* Update readme with new options
+  * Add input file validation
 
-2012-10-20 Damon McDougall 
+2012-10-22 Damon McDougall
 
-	* Add --title-font-size
+  * Fix auto tick placement when not user-specified
 
-2012-10-20 Damon McDougall 
+2012-10-20 Damon McDougall
 
-	* Add --top-label option to set axes title
+  * Update readme with new options
 
-2012-10-20 Damon McDougall 
+2012-10-20 Damon McDougall
 
-	* Add --color option to set line color
+  * Add --title-font-size
 
-2012-10-20 Damon McDougall 
+2012-10-20 Damon McDougall
 
-	* Add --tick-size option for setting tick length
+  * Add --top-label option to set axes title
 
-2012-10-20 Damon McDougall 
+2012-10-20 Damon McDougall
 
-	* Add --font-size option to set tick and label size
+  * Add --color option to set line color
 
-2012-10-20 Damon McDougall 
+2012-10-20 Damon McDougall
 
-	* Add --line-mode for cycling line-styles
+  * Add --tick-size option for setting tick length
 
-2012-10-20 Damon McDougall 
+2012-10-20 Damon McDougall
 
-	* Add --grid option to turn on plot grid
+  * Add --font-size option to set tick and label size
 
-2012-10-20 Damon McDougall 
+2012-10-20 Damon McDougall
 
-	* Add --toggle-no-ticks option
+  * Add --line-mode for cycling line-styles
 
-2012-10-20 Damon McDougall 
+2012-10-20 Damon McDougall
 
-	* Add --line-width option
+  * Add --grid option to turn on plot grid
 
-2012-10-20 Damon McDougall 
+2012-10-20 Damon McDougall
 
-	* Remove separate parse_fig_params function
+  * Add --toggle-no-ticks option
 
-2012-10-20 Damon McDougall 
+2012-10-20 Damon McDougall
 
-	* Add --tight option for tight layout
+  * Add --line-width option
 
-2012-10-20 Damon McDougall 
+2012-10-20 Damon McDougall
 
-	* Move arg parsing before mpl imports. It is faster
+  * Remove separate parse_fig_params function
 
-2012-10-20 Damon McDougall 
+2012-10-20 Damon McDougall
 
-	* Put usage string and version numbers in variables
+  * Add --tight option for tight layout
 
-2012-10-20 Damon McDougall 
+2012-10-20 Damon McDougall
 
-	* Add dependency list to readme
+  * Move arg parsing before mpl imports. It is faster
 
-2012-10-20 Damon McDougall 
+2012-10-20 Damon McDougall
 
-	* Update readme to include usage information
+  * Put usage string and version numbers in variables
 
-2012-10-20 Damon McDougall 
+2012-10-20 Damon McDougall
 
-	* Add readme
+  * Add dependency list to readme
 
-2012-10-19 Damon McDougall 
+2012-10-20 Damon McDougall
 
-	* Initial commit
+  * Update readme to include usage information
+
+2012-10-20 Damon McDougall
+
+  * Add readme
+
+2012-10-19 Damon McDougall
+
+  * Initial commit
 
