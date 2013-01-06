@@ -64,6 +64,24 @@ The following `bash` commands show an explicit example of `mpl-graph` usage.
     EOF
     $ mpl-graph -T pdf -s 6,6 -x 1,4 -y 0,3 -X 'x label' -Y 'y label' data.dat > plot.pdf
 
+The example above shows how to plot a text file. HDF5 files are also supported
+but boast a slightly different syntax. 
+
+    $ mpl-graph -T pdf filename:/path/to/dataset > plot.pdf
+
+A single colon followed by a forward slash delimits the the name of the file
+and the path to the dataset inside the HDF5 file. For example, to plot the
+`/group1/group2/my_dataset` dataset in the file called `my_data.h5`, one would
+execute:
+
+    $ mpl-graph -T pdf my_data.h5:/group1/group2/dataset > plot.pdf
+
+To plot without the `--auto-abscissa` option, the dataset must be two
+dimensional, with the first dimension being an array of abscissa, and the
+second dimension being the array of line data to be plotted. If, instead, the
+`--auto-abscissa` option is provided, the dataset must be one-dimensional (an
+array) containing only the line data to be plotted.
+
 Contributing
 ============
 
@@ -73,3 +91,6 @@ ample. Support for several files (and even file types!) is yet to be
 implemented. Lastly, and probably most importantly, validation on the passed
 command-line options should be more strict. `mpl-graph` should be helpful to
 the user and should fail gracefully. Currently it does not.
+
+The branching model used for `mpl_binutils` can be found
+[here](http://nvie.com/posts/a-successful-git-branching-model/).
