@@ -45,7 +45,8 @@ from matplotlib import rcParams
 
 def split_option(option, length):
     """
-    Split the string *option* by ',', and return a list of length *length*
+    Split the string *option* by ','. Return a list of length l, where l
+    is in *length*, a list of ints. If l is not in *length*, then exit.
     """
     length = list(length)
     args = option.split(',')
@@ -105,7 +106,7 @@ def produce_plot(args, ext_params=None):
     fig = Figure()
     if args['--size-of-plot']:
         size = args['--size-of-plot']
-        size = [float(i) for i in split_option(size, 2)]
+        size = [float(i) for i in split_option(size, [2])]
         fig.set_size_inches(size)
 
     canvas = fc(fig)
