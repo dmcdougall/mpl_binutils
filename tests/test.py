@@ -9,6 +9,9 @@ from docopt import docopt
 sys.dont_write_bytecode = True
 mpl_graph = imp.load_source("mpl-graph", '../mpl-graph')
 
+class NewTestError(Exception):
+    pass
+
 def setup():
     # These setting were taken from the matplotlib codebase to ensure
     # the user's rc file does not interfere with the produced output
@@ -23,19 +26,74 @@ def setup():
     rcParams['text.hinting_factor'] = 8
     rcParams['text.antialiased'] = False
 
-@with_setup(setup, None)
-def defaults_test():
-    # Get the true hash
-    true_hash_file = open('defaults_test.hash', 'r')
-    true_hash = true_hash_file.read().strip()
-    true_hash_file.close()
+def hash_setup(test):
+    def hash_test():
+        sys.stdout = output = io.BytesIO()
 
+        test_hash = test()
+
+        output.seek(0)
+        test_hash = hashlib.md5(output.read()).hexdigest()
+        output.close()
+
+        # Get the true hash
+        try:
+            true_hash_file = open(test.__name__ + '.hash', 'r')
+        except IOError:
+            # File doesn't exist because it's a new test and there's no
+            # true hash file
+            true_hash_file = open(test.__name__ + '.hash', 'w')
+            true_hash_file.write(test_hash + '\n')
+            true_hash_file.close()
+            true_hash_file = open(test.__name__ + '.hash', 'r')
+            raise NewTestError("New test found. Run again.")
+
+        true_hash = true_hash_file.read().strip()
+        true_hash_file.close()
+
+        assert true_hash == test_hash, 'Test "{}" failed with hash {}'.format(
+                test.__name__, test_hash)
+
+    return hash_test
+
+@hash_setup
+def defaults_test():
     # Run the utility with specified options
     args = docopt(mpl_graph.usage, argv=['-T', 'png', 'data.txt'])
-    sys.stdout = output = io.BytesIO()
-    mpl_graph.produce_plot(args, rcParams)
-    output.seek(0)
 
-    # Check true has against test hash
-    test_hash = hashlib.md5(output.read()).hexdigest()
-    assert true_hash == test_hash
+    # mpl-graph dumps to stdout, so we capture it in the decorator
+    mpl_graph.produce_plot(args, rcParams)
+
+@hash_setup
+def abscissa_test():
+    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-a', 'data.txt'])
+    mpl_graph.produce_plot(args, rcParams)
+
+@hash_setup
+def fontsize_test():
+    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-f', '15', 'data.txt'])
+    mpl_graph.produce_plot(args, rcParams)
+
+@hash_setup
+def grid_test():
+    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-g', 'data.txt'])
+    mpl_graph.produce_plot(args, rcParams)
+
+@hash_setup
+def linewidth_test():
+    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-W', '40', 'data.txt'])
+    mpl_graph.produce_plot(args, rcParams)
+
+@hash_setup
+def linemode_test():
+    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-m', '1', 'data.txt'])
+    mpl_graph.produce_plot(args, rcParams)
+
+    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-m', '2', 'data.txt'])
+    mpl_graph.produce_plot(args, rcParams)
+
+    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-m', '3', 'data.txt'])
+    mpl_graph.produce_plot(args, rcParams)
+
+    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-m', '4', 'data.txt'])
+    mpl_graph.produce_plot(args, rcParams)
