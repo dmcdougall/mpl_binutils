@@ -1,5 +1,9 @@
 2013-01-08 Damon McDougall
 
+  * Add HDF5 file test
+
+2013-01-08 Damon McDougall
+
   * Add tests to obtain 81% code coverage
 
 2013-01-08 Damon McDougall

@@ -163,3 +163,8 @@ def titlefontsize_test():
 def tight_test():
     args = docopt(mpl_graph.usage, argv=['-T', 'png', '--tight', 'data.txt'])
     mpl_graph.produce_plot(args, rcParams)
+
+@hash_setup
+def hdf5_test():
+    args = docopt(mpl_graph.usage, argv=['-T', 'png', 'data.h5:/a/b/c/my_data'])
+    mpl_graph.produce_plot(args, rcParams)
