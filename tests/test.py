@@ -97,3 +97,69 @@ def linemode_test():
 
     args = docopt(mpl_graph.usage, argv=['-T', 'png', '-m', '4', 'data.txt'])
     mpl_graph.produce_plot(args, rcParams)
+
+@hash_setup
+def ticksize_test():
+    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-k', '10', 'data.txt'])
+    mpl_graph.produce_plot(args, rcParams)
+
+@hash_setup
+def log_test():
+    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-l', 'x,y', 'data.txt'])
+    mpl_graph.produce_plot(args, rcParams)
+
+@hash_setup
+def size_test():
+    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-s', '4.0,4.0', 'data.txt'])
+    mpl_graph.produce_plot(args, rcParams)
+
+@hash_setup
+def noticks_test():
+    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-N', 'x,y', 'data.txt'])
+    mpl_graph.produce_plot(args, rcParams)
+
+@hash_setup
+def color_test():
+    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-C', 'red', 'data.txt'])
+    mpl_graph.produce_plot(args, rcParams)
+
+@hash_setup
+def toplabel_test():
+    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-L', 'hello', 'data.txt'])
+    mpl_graph.produce_plot(args, rcParams)
+
+@hash_setup
+def xlim_test():
+    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-x', '0,5', 'data.txt'])
+    mpl_graph.produce_plot(args, rcParams)
+
+    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-x', '0,5,11', 'data.txt'])
+    mpl_graph.produce_plot(args, rcParams)
+
+@hash_setup
+def ylim_test():
+    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-y', '0,2', 'data.txt'])
+    mpl_graph.produce_plot(args, rcParams)
+
+    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-y', '0,2,9', 'data.txt'])
+    mpl_graph.produce_plot(args, rcParams)
+
+@hash_setup
+def xlabel_test():
+    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-X', 'hello', 'data.txt'])
+    mpl_graph.produce_plot(args, rcParams)
+
+@hash_setup
+def ylabel_test():
+    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-Y', 'hello', 'data.txt'])
+    mpl_graph.produce_plot(args, rcParams)
+
+@hash_setup
+def titlefontsize_test():
+    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-L', 'hello', '--title-font-size', '28', 'data.txt'])
+    mpl_graph.produce_plot(args, rcParams)
+
+@hash_setup
+def tight_test():
+    args = docopt(mpl_graph.usage, argv=['-T', 'png', '--tight', 'data.txt'])
+    mpl_graph.produce_plot(args, rcParams)

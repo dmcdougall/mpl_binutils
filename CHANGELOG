@@ -1,5 +1,9 @@
 2013-01-08 Damon McDougall
 
+  * Add tests to obtain 81% code coverage
+
+2013-01-08 Damon McDougall
+
   * Fix bug in parsing plot size
 
 2013-01-07 Damon McDougall
