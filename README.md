@@ -48,12 +48,14 @@ for usage information. You should get output like the following
            mpl-graph --version
 
     Options:
+        -a, --auto-abscissa             Automatically generate the abscissa
         -T, --output-format=<filetype>  Specify output filetype [default: pdf]
         -f, --font-size=<fontsize>      Set font size for ticks and labels
         -g, --grid                      Turn on grid
         -W, --line-width=<linewidth>    Set line-width of plotted lines
-        -m, --line-mode                 Value from 1-4 specifying line style [default: 1]
+        -m, --line-mode=<linemode>      Value from 1-4 specifying line style [default: 1]
         -k, --tick-size=<ticksize>      Set tick length
+        -l, --toggle-log-axis=<axes>    Toggle log axis for the given comma-separated list of axes
         -s, --size-of-plot=<size>       Specify plot size in inches: width,height
         -N, --toggle-no-ticks=<axes>    Turn off ticks for the given comma-separated list of axes
         -C, --color=<color>             Set line color
