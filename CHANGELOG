@@ -1,6 +1,22 @@
 2013-01-08 Damon McDougall
 
+  * Add failure tets to obtain 97% code coverage
+
+2013-01-08 Damon McDougall
+
+  * Add HDF5 file test
+
+2013-01-08 Damon McDougall
+
+  * Add tests to obtain 81% code coverage
+
+2013-01-08 Damon McDougall
+
   * Fix bug in parsing plot size
+
+2013-01-07 Damon McDougall
+
+  * Add tests to obtains 50% code coverage
 
 2013-01-07 Damon McDougall
 
