@@ -1,3 +1,7 @@
+2013-01-07 Damon McDougall
+
+  * Fix bug in line-mode option handling
+
 2013-01-04 Damon McDougall 
 
 	* Add CHANGELOG file
