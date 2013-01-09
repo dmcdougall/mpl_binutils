@@ -38,17 +38,22 @@ ERR_ARG_TYPE = -2
 ERR_INPUT_FILE = -3
 ERR_OPTIONAL_DEP = -4
 ERR_OUTPUT_TYPE = -5
+ERR_REQ_DEP = -6
 
 import sys
-from docopt import docopt
+try:
+    from docopt import docopt
+    from matplotlib import rcParams
+except ImportError:
+    sys.stderr.write('mpl-graph: Missing required dependency (matplotlib '
+            'or docopt)\n')
+    sys.exit(ERR_REQ_DEP)
 
 import numpy as np
-
 from matplotlib.backend_bases import FigureCanvasBase
 from matplotlib.backends.backend_agg import FigureCanvasAgg as fc
 from matplotlib.figure import Figure
 import matplotlib.ticker as mticker
-from matplotlib import rcParams
 
 def split_option(option, length):
     """
