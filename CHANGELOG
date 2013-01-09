@@ -1,5 +1,9 @@
 2013-01-08 Damon McDougall
 
+  * Add test that simulates missing optional dep
+
+2013-01-08 Damon McDougall
+
   * Use error codes for failure tests
 
 2013-01-08 Damon McDougall

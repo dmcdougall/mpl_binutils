@@ -45,3 +45,16 @@ def badfile_test():
         mpl_graph.produce_plot(args, rcParams)
     except SystemExit as e:
         assert e.code == mpl_graph.ERR_INPUT_FILE
+
+@failure_setup
+def h5py_test():
+    # Simulate missing optional dependency
+    sys.modules['h5py'] = None
+
+    args = docopt(mpl_graph.usage, argv=['-T', 'png', 'data.h5:/a/b/c/my_data'])
+    try:
+        mpl_graph.produce_plot(args, rcParams)
+    except SystemExit as e:
+        assert e.code == mpl_graph.ERR_OPTIONAL_DEP
+    finally:
+        del sys.modules['h5py']
