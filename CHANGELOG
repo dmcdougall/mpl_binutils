@@ -1,5 +1,9 @@
 2013-01-08 Damon McDougall
 
+  * Use error codes for failure tests
+
+2013-01-08 Damon McDougall
+
   * Update README.md to latest mpl-graph interface
 
 2013-01-08 Damon McDougall
