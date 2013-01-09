@@ -1,0 +1,11 @@
+language: python
+python:
+  - 2.7
+install:
+  - pip install numpy
+  - pip install matplotlib
+  - pip install docopt
+  - pip install h5py
+script:
+  - cd tests
+  - nosetests

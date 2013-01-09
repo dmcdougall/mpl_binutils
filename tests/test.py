@@ -1,6 +1,6 @@
 import sys
 import imp
-import hashlib
+import codecs
 import io
 from nose import with_setup
 from matplotlib import rcParams, rcdefaults
@@ -21,150 +21,149 @@ def setup():
     # tests and are not necessarily the default values as specified in
     # rcsetup.py
     rcdefaults() # Start with all defaults
-    rcParams['font.family'] = 'Bitstream Vera Sans'
+    rcParams['font.family'] = 'monospace'
     rcParams['text.hinting'] = False
-    rcParams['text.hinting_factor'] = 8
+    rcParams['text.hinting_factor'] = 16
     rcParams['text.antialiased'] = False
 
-def hash_setup(test):
-    def hash_test():
-        sys.stdout = output = io.BytesIO()
+def img_setup(test):
+    def img_test():
+        sys.stdout = output = io.StringIO()
 
-        test_hash = test()
+        test()
 
         output.seek(0)
-        test_hash = hashlib.md5(output.read()).hexdigest()
+        test_img = output.read()
         output.close()
 
-        # Get the true hash
+        # Get the true img
         try:
-            true_hash_file = open(test.__name__ + '.hash', 'r')
+            true_img_file = codecs.open(test.__name__ + '.svg', 'r', 'utf8')
         except IOError:
             # File doesn't exist because it's a new test and there's no
-            # true hash file
-            true_hash_file = open(test.__name__ + '.hash', 'w')
-            true_hash_file.write(test_hash + '\n')
-            true_hash_file.close()
-            true_hash_file = open(test.__name__ + '.hash', 'r')
+            # true img file
+            true_img_file = codecs.open(test.__name__ + '.svg', 'w', 'utf8')
+            true_img_file.write(test_img)
+            true_img_file.close()
             raise NewTestError("New test found. Run again.")
 
-        true_hash = true_hash_file.read().strip()
-        true_hash_file.close()
+        # true_img = true_img_file.read().strip()
+        true_img = true_img_file.read()
+        true_img_file.close()
 
-        assert true_hash == test_hash, 'Test "{}" failed with hash {}'.format(
-                test.__name__, test_hash)
+        assert true_img == test_img, 'Test "{}" failed.'.format(test.__name__)
 
-    return hash_test
+    return img_test
 
-@hash_setup
+@img_setup
 def defaults_test():
     # Run the utility with specified options
-    args = docopt(mpl_graph.usage, argv=['-T', 'png', 'data.txt'])
+    args = docopt(mpl_graph.usage, argv=['-T', 'svg', 'data.txt'])
 
     # mpl-graph dumps to stdout, so we capture it in the decorator
     mpl_graph.produce_plot(args, rcParams)
 
-@hash_setup
+@img_setup
 def abscissa_test():
-    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-a', 'data.txt'])
+    args = docopt(mpl_graph.usage, argv=['-T', 'svg', '-a', 'data.txt'])
     mpl_graph.produce_plot(args, rcParams)
 
-@hash_setup
+@img_setup
 def fontsize_test():
-    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-f', '15', 'data.txt'])
+    args = docopt(mpl_graph.usage, argv=['-T', 'svg', '-f', '15', 'data.txt'])
     mpl_graph.produce_plot(args, rcParams)
 
-@hash_setup
+@img_setup
 def grid_test():
-    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-g', 'data.txt'])
+    args = docopt(mpl_graph.usage, argv=['-T', 'svg', '-g', 'data.txt'])
     mpl_graph.produce_plot(args, rcParams)
 
-@hash_setup
+@img_setup
 def linewidth_test():
-    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-W', '40', 'data.txt'])
+    args = docopt(mpl_graph.usage, argv=['-T', 'svg', '-W', '40', 'data.txt'])
     mpl_graph.produce_plot(args, rcParams)
 
-@hash_setup
+@img_setup
 def linemode_test():
-    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-m', '1', 'data.txt'])
+    args = docopt(mpl_graph.usage, argv=['-T', 'svg', '-m', '1', 'data.txt'])
     mpl_graph.produce_plot(args, rcParams)
 
-    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-m', '2', 'data.txt'])
+    args = docopt(mpl_graph.usage, argv=['-T', 'svg', '-m', '2', 'data.txt'])
     mpl_graph.produce_plot(args, rcParams)
 
-    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-m', '3', 'data.txt'])
+    args = docopt(mpl_graph.usage, argv=['-T', 'svg', '-m', '3', 'data.txt'])
     mpl_graph.produce_plot(args, rcParams)
 
-    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-m', '4', 'data.txt'])
+    args = docopt(mpl_graph.usage, argv=['-T', 'svg', '-m', '4', 'data.txt'])
     mpl_graph.produce_plot(args, rcParams)
 
-@hash_setup
+@img_setup
 def ticksize_test():
-    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-k', '10', 'data.txt'])
+    args = docopt(mpl_graph.usage, argv=['-T', 'svg', '-k', '10', 'data.txt'])
     mpl_graph.produce_plot(args, rcParams)
 
-@hash_setup
+@img_setup
 def log_test():
-    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-l', 'x,y', 'data.txt'])
+    args = docopt(mpl_graph.usage, argv=['-T', 'svg', '-l', 'x,y', 'data.txt'])
     mpl_graph.produce_plot(args, rcParams)
 
-@hash_setup
+@img_setup
 def size_test():
-    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-s', '4.0,4.0', 'data.txt'])
+    args = docopt(mpl_graph.usage, argv=['-T', 'svg', '-s', '4.0,4.0', 'data.txt'])
     mpl_graph.produce_plot(args, rcParams)
 
-@hash_setup
+@img_setup
 def noticks_test():
-    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-N', 'x,y', 'data.txt'])
+    args = docopt(mpl_graph.usage, argv=['-T', 'svg', '-N', 'x,y', 'data.txt'])
     mpl_graph.produce_plot(args, rcParams)
 
-@hash_setup
+@img_setup
 def color_test():
-    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-C', 'red', 'data.txt'])
+    args = docopt(mpl_graph.usage, argv=['-T', 'svg', '-C', 'red', 'data.txt'])
     mpl_graph.produce_plot(args, rcParams)
 
-@hash_setup
+@img_setup
 def toplabel_test():
-    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-L', 'hello', 'data.txt'])
+    args = docopt(mpl_graph.usage, argv=['-T', 'svg', '-L', 'hello', 'data.txt'])
     mpl_graph.produce_plot(args, rcParams)
 
-@hash_setup
+@img_setup
 def xlim_test():
-    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-x', '0,5', 'data.txt'])
+    args = docopt(mpl_graph.usage, argv=['-T', 'svg', '-x', '0,5', 'data.txt'])
     mpl_graph.produce_plot(args, rcParams)
 
-    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-x', '0,5,11', 'data.txt'])
+    args = docopt(mpl_graph.usage, argv=['-T', 'svg', '-x', '0,5,11', 'data.txt'])
     mpl_graph.produce_plot(args, rcParams)
 
-@hash_setup
+@img_setup
 def ylim_test():
-    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-y', '0,2', 'data.txt'])
+    args = docopt(mpl_graph.usage, argv=['-T', 'svg', '-y', '0,2', 'data.txt'])
     mpl_graph.produce_plot(args, rcParams)
 
-    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-y', '0,2,9', 'data.txt'])
+    args = docopt(mpl_graph.usage, argv=['-T', 'svg', '-y', '0,2,9', 'data.txt'])
     mpl_graph.produce_plot(args, rcParams)
 
-@hash_setup
+@img_setup
 def xlabel_test():
-    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-X', 'hello', 'data.txt'])
+    args = docopt(mpl_graph.usage, argv=['-T', 'svg', '-X', 'hello', 'data.txt'])
     mpl_graph.produce_plot(args, rcParams)
 
-@hash_setup
+@img_setup
 def ylabel_test():
-    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-Y', 'hello', 'data.txt'])
+    args = docopt(mpl_graph.usage, argv=['-T', 'svg', '-Y', 'hello', 'data.txt'])
     mpl_graph.produce_plot(args, rcParams)
 
-@hash_setup
+@img_setup
 def titlefontsize_test():
-    args = docopt(mpl_graph.usage, argv=['-T', 'png', '-L', 'hello', '--title-font-size', '28', 'data.txt'])
+    args = docopt(mpl_graph.usage, argv=['-T', 'svg', '-L', 'hello', '--title-font-size', '28', 'data.txt'])
     mpl_graph.produce_plot(args, rcParams)
 
-@hash_setup
+@img_setup
 def tight_test():
-    args = docopt(mpl_graph.usage, argv=['-T', 'png', '--tight', 'data.txt'])
+    args = docopt(mpl_graph.usage, argv=['-T', 'svg', '--tight', 'data.txt'])
     mpl_graph.produce_plot(args, rcParams)
 
-@hash_setup
+@img_setup
 def hdf5_test():
-    args = docopt(mpl_graph.usage, argv=['-T', 'png', 'data.h5:/a/b/c/my_data'])
+    args = docopt(mpl_graph.usage, argv=['-T', 'svg', 'data.h5:/a/b/c/my_data'])
     mpl_graph.produce_plot(args, rcParams)

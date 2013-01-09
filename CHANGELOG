@@ -1,3 +1,11 @@
+2013-01-09 Damon McDougall
+
+  * Use Travis-CI to check the hashes
+
+2013-01-09 Damon McDougall
+
+  * Use monospace font to avoid one-pixel hash errors
+
 2013-01-08 Damon McDougall
 
   * Update README.md to latest mpl-graph interface
