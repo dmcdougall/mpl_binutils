@@ -1,10 +1,10 @@
 2013-01-09 Damon McDougall
 
-  * Use Travis-CI to check the hashes
+  * Updating test suite to use SVGs instead of hashes
 
 2013-01-09 Damon McDougall
 
-  * Use monospace font to avoid one-pixel hash errors
+  * Use Travis-CI
 
 2013-01-08 Damon McDougall
 
