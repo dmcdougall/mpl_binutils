@@ -3,6 +3,7 @@ import imp
 import codecs
 import io
 import nose
+import difflib
 from matplotlib import rcParams, rcdefaults
 from docopt import docopt
 
@@ -25,6 +26,16 @@ def setup():
     rcParams['text.hinting'] = False
     rcParams['text.hinting_factor'] = 16
     rcParams['text.antialiased'] = False
+
+def spit_diff(a, b):
+    diff = difflib.unified_diff(a.split('\n'), b.split('\n'),
+            fromfile="expected", tofile="computed")
+    diff = [line for line in diff]
+    headings = diff[0:3]
+    diff_output = diff[3::]
+    headings = ''.join(headings)
+    diff_output = '\n'.join(diff_output)
+    return '\n' + headings + diff_output
 
 def img_setup(test):
     def img_test():
@@ -51,7 +62,8 @@ def img_setup(test):
         true_img = true_img_file.read()
         true_img_file.close()
 
-        assert true_img == test_img, 'Test "{}" failed.'.format(test.__name__)
+        assert true_img == test_img, ('Test "{}" failed. Diff follows:\n'
+                '{}'.format(test.__name__, spit_diff(true_img, test_img)))
 
     return img_test
 
