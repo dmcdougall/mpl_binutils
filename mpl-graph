@@ -100,7 +100,7 @@ def produce_plot(args, ext_params=None):
             sys.stderr.write('mpl-graph: {}: Not a valid input file\n'.format(args['<file>']))
             sys.exit(1)
         lines = infile.read()
-        data = [float(coord) for coord in lines.split()]
+        data = np.asarray([float(coord) for coord in lines.split()])
         infile.close()
 
     fig = Figure()
