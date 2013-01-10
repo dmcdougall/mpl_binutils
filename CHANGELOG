@@ -1,3 +1,11 @@
+2013-01-09 Damon McDougall
+
+  * Updating test suite to use SVGs instead of hashes
+
+2013-01-09 Damon McDougall
+
+  * Use Travis-CI
+
 2013-01-08 Damon McDougall
 
   * Update README.md to latest mpl-graph interface
