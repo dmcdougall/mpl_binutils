@@ -120,13 +120,13 @@ def produce_plot(args, ext_params=None):
     if args['--line-mode']:
         ls = int(args['--line-mode'])
         if ls == 1:
-            plot_kwargs['ls'] = '-'
+            plot_kwargs['ls'] = 'solid'
         elif ls == 2:
-            plot_kwargs['ls'] = '--'
+            plot_kwargs['ls'] = 'dashed'
         elif ls == 3:
-            plot_kwargs['ls'] = '-.'
+            plot_kwargs['ls'] = 'dashdot'
         elif ls == 4:
-            plot_kwargs['ls'] = ':'
+            plot_kwargs['ls'] = 'dotted'
 
     if args['--color']:
         plot_kwargs['color'] = args['--color']
