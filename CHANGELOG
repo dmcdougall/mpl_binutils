@@ -1,3 +1,11 @@
+2013-01-11 Damon McDougall
+
+  * Bump major version to reflect interface change
+
+2013-01-10 Damon McDougall
+
+  * Allow the user to specify --tight padding
+
 2013-01-10 Damon McDougall
 
   * Add -q, --fill-fraction option to fill polys
