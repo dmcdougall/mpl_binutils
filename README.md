@@ -49,6 +49,7 @@ for usage information. You should get output like the following
 
     Options:
         -a, --auto-abscissa             Automatically generate the abscissa
+        -q, --fill-fraction=<alpha>     Specifies the alpha of a filled polygon
         -T, --output-format=<filetype>  Specify output filetype [default: pdf]
         -f, --font-size=<fontsize>      Set font size for ticks and labels
         -g, --grid                      Turn on grid
