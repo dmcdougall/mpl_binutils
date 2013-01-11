@@ -188,3 +188,9 @@ def hdf5_test():
         raise nose.SkipTest
     args = docopt(mpl_graph.usage, argv=['-T', 'svg', 'data.h5:/a/b/c/my_data'])
     mpl_graph.produce_plot(args, rcParams)
+
+@img_setup
+def fill_test():
+    args = docopt(mpl_graph.usage, argv=['-T', 'svg', '-q', '0.3',
+        '-x', '0,10', '-y', '0,10', 'fill_test.txt'])
+    mpl_graph.produce_plot(args, rcParams)
