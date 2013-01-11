@@ -181,10 +181,6 @@ def tight_test():
 
 @img_setup
 def hdf5_test():
-    try:
-        import h5py
-    except ImportError:
-        raise nose.SkipTest
     args = docopt(mpl_graph.usage, argv=['-T', 'svg', 'data.h5:/a/b/c/my_data'])
     mpl_graph.produce_plot(args, rcParams)
 

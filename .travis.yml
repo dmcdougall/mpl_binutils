@@ -5,6 +5,17 @@ install:
   - pip install numpy
   - pip install matplotlib
   - pip install docopt
+  - TOP_DIR=$(pwd)
+  - echo $TOP_DIR
+  - wget http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.10.tar.gz
+  - tar -xvf hdf5-1.8.10.tar.gz
+  - cd hdf5-1.8.10
+  - ./configure --prefix=$TOP_DIR
+  - make
+  - make install
+  - cd ..
+  - export HDF5_DIR=$TOP_DIR
+  - easy_install h5py
 script:
   - cd tests
   - nosetests
