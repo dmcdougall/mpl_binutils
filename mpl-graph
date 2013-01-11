@@ -214,7 +214,7 @@ def produce_plot(args, ext_params=None):
         ax.title.set_fontsize(size)
 
     if args['--tight']:
-        fig.tight_layout(pad=0.1)
+        fig.tight_layout(pad=0.0)
     fig.savefig(sys.stdout, format=args['--output-format'])
 
 if __name__ == '__main__':

@@ -176,7 +176,6 @@ def tight_test():
     #        The diff is nonempty but the difference is in the tenth
     #        digit of a float. Tiny.
     #        Need a better way of comparing SVGs
-    raise nose.SkipTest
     args = docopt(mpl_graph.usage, argv=['-T', 'svg', '--tight', 'data.txt'])
     mpl_graph.produce_plot(args, rcParams)
 
