@@ -13,6 +13,7 @@ Usage: mpl-graph [options] <file>
 
 Options:
     -a, --auto-abscissa             Automatically generate the abscissa
+    -q, --fill-fraction=<alpha>     Specifies the alpha of a filled polygon
     -T, --output-format=<filetype>  Specify output filetype [default: pdf]
     -f, --font-size=<fontsize>      Set font size for ticks and labels
     -g, --grid                      Turn on grid
@@ -132,6 +133,21 @@ def produce_plot(args, ext_params=None):
         plot_kwargs['color'] = args['--color']
 
     # Plot the data
+    if args['--fill-fraction']:
+        from matplotlib.path import Path
+        import matplotlib.patches as mpatches
+
+        plot_kwargs['alpha'] = to_float(args, '--fill-fraction')
+
+        # When specified, data contains x-coords and -a is ignored
+        verts = data.reshape((len(data) / 2, 2))
+        codes = [Path.MOVETO]
+        codes += [Path.LINETO] * (len(verts) - 2)
+        codes += [Path.CLOSEPOLY]
+
+        path = Path(verts, codes)
+        patch = mpatches.PathPatch(path, **plot_kwargs)
+        ax.add_patch(patch)
     if args['--auto-abscissa']:
         ax.plot(range(len(data)), data, **plot_kwargs)
     else:
