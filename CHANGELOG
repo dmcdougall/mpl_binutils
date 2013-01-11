@@ -1,5 +1,9 @@
 2013-01-10 Damon McDougall
 
+  * Allow the user to specify --tight padding
+
+2013-01-10 Damon McDougall
+
   * Add -q, --fill-fraction option to fill polys
 
 2013-01-09 Damon McDougall
