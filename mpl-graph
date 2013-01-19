@@ -4,7 +4,7 @@
 #
 # Author: Damon McDougall <damon.mcdougall@gmail.com>
 
-version='1.0.1'
+version='1.1.0'
 
 usage = """
 Usage: mpl-graph [options] <file>
@@ -12,12 +12,14 @@ Usage: mpl-graph [options] <file>
        mpl-graph --version
 
 Options:
+    -a, --auto-abscissa             Automatically generate the abscissa
     -T, --output-format=<filetype>  Specify output filetype [default: pdf]
     -f, --font-size=<fontsize>      Set font size for ticks and labels
     -g, --grid                      Turn on grid
     -W, --line-width=<linewidth>    Set line-width of plotted lines
     -m, --line-mode=<linemode>      Value from 1-4 specifying line style [default: 1]
     -k, --tick-size=<ticksize>      Set tick length
+    -l, --toggle-log-axis=<axes>    Toggle log axis for the given comma-separated list of axes
     -s, --size-of-plot=<size>       Specify plot size in inches: width,height
     -N, --toggle-no-ticks=<axes>    Turn off ticks for the given comma-separated list of axes
     -C, --color=<color>             Set line color
@@ -30,114 +32,187 @@ Options:
     --tight                         Make the figure use most available whitespace
 """
 
-import sys
-from docopt import docopt
-args = docopt(usage, version=version)
+# Error return codes
+ERR_NUM_OPTIONS = -1
+ERR_ARG_TYPE = -2
+ERR_INPUT_FILE = -3
+ERR_OPTIONAL_DEP = -4
+ERR_OUTPUT_TYPE = -5
+ERR_REQ_DEP = -6
 
+import sys
+try:
+    from docopt import docopt
+    from matplotlib import rcParams
+except ImportError:
+    sys.stderr.write('mpl-graph: Missing required dependency (matplotlib '
+            'or docopt)\n')
+    sys.exit(ERR_REQ_DEP)
+
+import numpy as np
 from matplotlib.backend_bases import FigureCanvasBase
 from matplotlib.backends.backend_agg import FigureCanvasAgg as fc
 from matplotlib.figure import Figure
 import matplotlib.ticker as mticker
 
-types = FigureCanvasBase.filetypes.keys()
-if args['--output-format'] not in types:
-    sys.stderr.write('Format "asd" is not supported.\n')
-    sys.stderr.write('Supported formats: {}\n'.format(types))
-    sys.exit(1)
+def split_option(option, length):
+    """
+    Split the string *option* by ','. Return a list of length l, where l
+    is in *length*, a list of ints. If l is not in *length*, then exit.
+    """
+    length = list(length)
+    args = option.split(',')
+    if len(args) not in length:
+        sys.stderr.write('mpl-graph: Argument expected length {}. '
+                'Actual length of "{}" is {}\n'.format(length, option, len(args)))
+        sys.exit(ERR_NUM_OPTIONS)
+    return args
 
-# Data is assumed to be a text file specifying x and y coordinates
-try:
-    infile = open(args['<file>'])
-except IOError:
-    sys.stderr.write('mpl-graph: {}: Not a valid input file\n'.format(args['<file>']))
-    sys.exit(1)
-lines = infile.read()
-data = [float(coord) for coord in lines.split()]
-infile.close()
+def to_float(arg_dict, opt):
+    try:
+        val = float(arg_dict[opt])
+    except ValueError:
+        sys.stderr.write('mpl-graph: Invalid argument "{}" '
+                'passed to {}\n'.format(arg_dict[opt], opt))
+        sys.exit(ERR_ARG_TYPE)
+    return val
 
-fig = Figure()
-if args['--size-of-plot']:
-    size = args['--size-of-plot']
-    size = [float(i) for i in size.split(',')]
-    fig.set_size_inches(size)
+def produce_plot(args, ext_params=None):
+    # This is so we can pass default options for the testing suite
+    if ext_params is not None:
+        rcParams.update(ext_params)
 
-canvas = fc(fig)
-ax = fig.add_subplot(1, 1, 1)
+    types = FigureCanvasBase.filetypes.keys()
+    if args['--output-format'] not in types:
+        sys.stderr.write('Format "asd" is not supported.\n')
+        sys.stderr.write('Supported formats: {}\n'.format(types))
+        sys.exit(ERR_OUTPUT_TYPE)
 
-# Parse out plot properties
-plot_kwargs = {}
-if args['--line-width']:
-    plot_kwargs['lw'] =  float(args['--line-width'])
+    # Data is assumed to be a text file specifying x and y coordinates
+    # or an HDF5 file specifying only x and y coordinates in a 2d array
+    if ':/' in args['<file>']:
+        # Assume HDF5 file with format filename:/path/to/dset
+        try:
+            import h5py
+        except ImportError:
+            sys.stderr.write('mpl-graph: Could not find h5py\n')
+            sys.exit(ERR_OPTIONAL_DEP)
 
-if args['--line-mode']:
-    ls = int(args['--line-mode'])
-    if ls == 1:
-        plot_kwargs['ls'] = '-'
-    elif ls == 2:
-        plot_kwargs['ls'] = '--'
-    elif ls == 3:
-        plot_kwargs['ls'] = '-.'
-    elif ls == 4:
-        plot_kwargs['ls'] = ':'
+        tmp_fdata = args['<file>'].split(':')
+        hdfname = tmp_fdata[0]
+        dset_path = tmp_fdata[1]
+        hdf_file = h5py.File(hdfname, 'r')
+        hdf_data = hdf_file[dset_path][:]
+        if len(hdf_data == 2):
+            data = np.asarray(zip(hdf_data[0], hdf_data[1])).flatten()
+    else:
+        try:
+            infile = open(args['<file>'])
+        except IOError:
+            sys.stderr.write('mpl-graph: {}: Not a valid input file\n'.format(args['<file>']))
+            sys.exit(ERR_INPUT_FILE)
+        lines = infile.read()
+        data = [float(coord) for coord in lines.split()]
+        infile.close()
 
-if args['--color']:
-    plot_kwargs['color'] = args['--color']
+    fig = Figure()
+    if args['--size-of-plot']:
+        size = args['--size-of-plot']
+        size = [float(i) for i in split_option(size, [2])]
+        fig.set_size_inches(size)
 
-# Plot the data
-ax.plot(data[0::2], data[1::2], **plot_kwargs)
+    canvas = fc(fig)
+    ax = fig.add_subplot(1, 1, 1)
 
-if args['--grid']:
-    ax.grid(True)
+    # Parse out plot properties
+    plot_kwargs = {}
+    if args['--line-width']:
+        plot_kwargs['lw'] = to_float(args, '--line-width')
 
-# Set up labels
-if args['--x-label']:
-    ax.set_xlabel(args['--x-label'])
-if args['--y-label']:
-    ax.set_ylabel(args['--y-label'])
+    if args['--line-mode']:
+        ls = int(args['--line-mode'])
+        if ls == 1:
+            plot_kwargs['ls'] = '-'
+        elif ls == 2:
+            plot_kwargs['ls'] = '--'
+        elif ls == 3:
+            plot_kwargs['ls'] = '-.'
+        elif ls == 4:
+            plot_kwargs['ls'] = ':'
 
-if args['--top-label']:
-    ax.set_title(args['--top-label'])
+    if args['--color']:
+        plot_kwargs['color'] = args['--color']
 
-# Set up limits
-xlims = args['--x-limits']
-ylims = args['--y-limits']
-if xlims:
-    xlims = [float(i) for i in xlims.split(',')]
-    ax.set_xlim(xlims[0:2])
-    if len(xlims) == 3:
-        xlocator = mticker.MaxNLocator(int(xlims[2] - 1))
-        ax.xaxis.set_major_locator(xlocator)
-if ylims:
-    ylims = [float(i) for i in ylims.split(',')]
-    ax.set_ylim(ylims[0:2])
-    if len(ylims) == 3:
-        ylocator = mticker.MaxNLocator(int(ylims[2] - 1))
-        ax.yaxis.set_major_locator(ylocator)
+    # Plot the data
+    if args['--auto-abscissa']:
+        ax.plot(range(len(data)), data, **plot_kwargs)
+    else:
+        ax.plot(data[0::2], data[1::2], **plot_kwargs)
 
-# Specifying '--toggle-no-ticks' overrides the above locator
-if args['--toggle-no-ticks']:
-    list_axes = args['--toggle-no-ticks'].split(',')
-    if 'x' in list_axes:
-        ax.xaxis.set_major_locator(mticker.NullLocator())
-    if 'y' in list_axes:
-        ax.yaxis.set_major_locator(mticker.NullLocator())
+    # Specifying log axes
+    if args['--toggle-log-axis']:
+        list_axes = args['--toggle-log-axis'].split(',')
+        if 'x' in list_axes:
+            ax.set_xscale('log')
+        if 'y' in list_axes:
+            ax.set_yscale('log')
 
-if args['--tick-size']:
-    size = float(args['--tick-size'])
-    ax.xaxis.set_tick_params(length=size)
-    ax.yaxis.set_tick_params(length=size)
+    if args['--grid']:
+        ax.grid(True)
 
-if args['--font-size']:
-    size = float(args['--font-size'])
-    ax.xaxis.set_tick_params(labelsize=size)
-    ax.yaxis.set_tick_params(labelsize=size)
-    ax.xaxis.label.set_fontsize(size)
-    ax.yaxis.label.set_fontsize(size)
+    # Set up labels
+    if args['--x-label']:
+        ax.set_xlabel(args['--x-label'])
+    if args['--y-label']:
+        ax.set_ylabel(args['--y-label'])
 
-if args['--title-font-size']:
-    size = float(args['--title-font-size'])
-    ax.title.set_fontsize(size)
+    if args['--top-label']:
+        ax.set_title(args['--top-label'])
 
-if args['--tight']:
-    fig.tight_layout(pad=0.1)
-fig.savefig(sys.stdout, format=args['--output-format'])
+    # Set up limits
+    xlims = args['--x-limits']
+    ylims = args['--y-limits']
+    if xlims:
+        xlims = [float(i) for i in split_option(xlims, [2, 3])]
+        ax.set_xlim(xlims[0:2])
+        if len(xlims) == 3:
+            xlocator = mticker.MaxNLocator(int(xlims[2] - 1))
+            ax.xaxis.set_major_locator(xlocator)
+    if ylims:
+        ylims = [float(i) for i in split_option(ylims, [2, 3])]
+        ax.set_ylim(ylims[0:2])
+        if len(ylims) == 3:
+            ylocator = mticker.MaxNLocator(int(ylims[2] - 1))
+            ax.yaxis.set_major_locator(ylocator)
+
+    # Specifying '--toggle-no-ticks' overrides the above locator
+    if args['--toggle-no-ticks']:
+        list_axes = args['--toggle-no-ticks'].split(',')
+        if 'x' in list_axes:
+            ax.xaxis.set_major_locator(mticker.NullLocator())
+        if 'y' in list_axes:
+            ax.yaxis.set_major_locator(mticker.NullLocator())
+
+    if args['--tick-size']:
+        size = to_float(args, '--tick-size')
+        ax.xaxis.set_tick_params(length=size)
+        ax.yaxis.set_tick_params(length=size)
+
+    if args['--font-size']:
+        size = to_float(args, '--font-size')
+        ax.xaxis.set_tick_params(labelsize=size)
+        ax.yaxis.set_tick_params(labelsize=size)
+        ax.xaxis.label.set_fontsize(size)
+        ax.yaxis.label.set_fontsize(size)
+
+    if args['--title-font-size']:
+        size = to_float(args, '--title-font-size')
+        ax.title.set_fontsize(size)
+
+    if args['--tight']:
+        fig.tight_layout(pad=0.1)
+    fig.savefig(sys.stdout, format=args['--output-format'])
+
+if __name__ == '__main__':
+    cmd_args = docopt(usage, version=version)
+    produce_plot(cmd_args)
