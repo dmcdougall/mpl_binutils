@@ -33,16 +33,28 @@ Options:
     --tight=<padding>               Make the figure use most available whitespace
 """
 
+# Error return codes
+ERR_NUM_OPTIONS = -1
+ERR_ARG_TYPE = -2
+ERR_INPUT_FILE = -3
+ERR_OPTIONAL_DEP = -4
+ERR_OUTPUT_TYPE = -5
+ERR_REQ_DEP = -6
+
 import sys
-from docopt import docopt
+try:
+    from docopt import docopt
+    from matplotlib import rcParams
+except ImportError:
+    sys.stderr.write('mpl-graph: Missing required dependency (matplotlib '
+            'or docopt)\n')
+    sys.exit(ERR_REQ_DEP)
 
 import numpy as np
-
 from matplotlib.backend_bases import FigureCanvasBase
 from matplotlib.backends.backend_agg import FigureCanvasAgg as fc
 from matplotlib.figure import Figure
 import matplotlib.ticker as mticker
-from matplotlib import rcParams
 
 def split_option(option, length):
     """
@@ -54,7 +66,7 @@ def split_option(option, length):
     if len(args) not in length:
         sys.stderr.write('mpl-graph: Argument expected length {}. '
                 'Actual length of "{}" is {}\n'.format(length, option, len(args)))
-        sys.exit(1)
+        sys.exit(ERR_NUM_OPTIONS)
     return args
 
 def to_float(arg_dict, opt):
@@ -63,7 +75,7 @@ def to_float(arg_dict, opt):
     except ValueError:
         sys.stderr.write('mpl-graph: Invalid argument "{}" '
                 'passed to {}\n'.format(arg_dict[opt], opt))
-        sys.exit(1)
+        sys.exit(ERR_ARG_TYPE)
     return val
 
 def produce_plot(args, ext_params=None):
@@ -75,7 +87,7 @@ def produce_plot(args, ext_params=None):
     if args['--output-format'] not in types:
         sys.stderr.write('Format "asd" is not supported.\n')
         sys.stderr.write('Supported formats: {}\n'.format(types))
-        sys.exit(1)
+        sys.exit(ERR_OUTPUT_TYPE)
 
     # Data is assumed to be a text file specifying x and y coordinates
     # or an HDF5 file specifying only x and y coordinates in a 2d array
@@ -85,7 +97,7 @@ def produce_plot(args, ext_params=None):
             import h5py
         except ImportError:
             sys.stderr.write('mpl-graph: Could not find h5py\n')
-            sys.exit(1)
+            sys.exit(ERR_OPTIONAL_DEP)
 
         tmp_fdata = args['<file>'].split(':')
         hdfname = tmp_fdata[0]
@@ -99,7 +111,7 @@ def produce_plot(args, ext_params=None):
             infile = open(args['<file>'])
         except IOError:
             sys.stderr.write('mpl-graph: {}: Not a valid input file\n'.format(args['<file>']))
-            sys.exit(1)
+            sys.exit(ERR_INPUT_FILE)
         lines = infile.read()
         data = np.asarray([float(coord) for coord in lines.split()])
         infile.close()

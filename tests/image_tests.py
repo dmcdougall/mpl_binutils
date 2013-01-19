@@ -3,6 +3,7 @@ import imp
 import codecs
 import io
 import nose
+from nose.tools import make_decorator
 import difflib
 from matplotlib import rcParams, rcdefaults
 from docopt import docopt
@@ -65,7 +66,7 @@ def img_setup(test):
         assert true_img == test_img, ('Test "{}" failed. Diff follows:\n'
                 '{}'.format(test.__name__, spit_diff(true_img, test_img)))
 
-    return img_test
+    return make_decorator(test)(img_test)
 
 @img_setup
 def defaults_test():
