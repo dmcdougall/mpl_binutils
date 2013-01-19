@@ -3,6 +3,7 @@ import imp
 import hashlib
 import io
 from nose import with_setup
+from nose.tools import make_decorator
 from matplotlib import rcParams, rcdefaults
 from docopt import docopt
 
@@ -54,7 +55,7 @@ def hash_setup(test):
         assert true_hash == test_hash, 'Test "{}" failed with hash {}'.format(
                 test.__name__, test_hash)
 
-    return hash_test
+    return make_decorator(test)(hash_test)
 
 @hash_setup
 def defaults_test():

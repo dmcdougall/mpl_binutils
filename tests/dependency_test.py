@@ -1,6 +1,7 @@
 import sys
 import io
 import imp
+from nose.tools import make_decorator
 
 sys.dont_write_bytecode = True
 
@@ -9,7 +10,7 @@ def failure_setup(test):
         # This is just to kill print output
         sys.stderr = io.BytesIO()
         test()
-    return failure_test
+    return make_decorator(test)(failure_test)
 
 @failure_setup
 def docopt_test():
