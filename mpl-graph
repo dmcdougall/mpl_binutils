@@ -102,9 +102,11 @@ def produce_plot(args, ext_params=None):
         hdfname = tmp_fdata[0]
         dset_path = tmp_fdata[1]
         hdf_file = h5py.File(hdfname, 'r')
-        hdf_data = hdf_file[dset_path][:]
-        if len(hdf_data == 2):
+        hdf_data = hdf_file[dset_path]
+        if len(hdf_data.shape) == 2:
             data = np.asarray(zip(hdf_data[0], hdf_data[1])).flatten()
+        elif len(hdf_data.shape) == 1:
+            data = hdf_data
     else:
         try:
             infile = open(args['<file>'])
